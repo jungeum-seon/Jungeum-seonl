@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>이철헤어커커 대치스타점</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 50px;
+}
+#roulette {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    border: 10px solid #333;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+}
+.segment {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    top: 50%;
+    left: 50%;
+    transform-origin: 0% 0%;
+    background-color: lightcoral;
+    color: white;
+    text-align: center;
+    line-height: 2;
+    font-weight: bold;
+}
+#spinBtn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 18px;
+}
+</style>
+</head>
+<body>
+<h1>이철헤어커커 대치스타점</h1>
+<div id="roulette"></div>
+<button id="spinBtn">룰렛 돌리기</button>
+<p id="result"></p>
+
+<script>
+const prizes = ["무료 커트", "10% 할인", "헤어팩 증정", "드라이 서비스", "스타일링 무료", "깜짝 선물"];
+const roulette = document.getElementById("roulette");
+const result = document.getElementById("result");
+let spun = false;
+
+// 룰렛 세그먼트 만들기
+prizes.forEach((prize, i) => {
+    const seg = document.createElement("div");
+    seg.className = "segment";
+    seg.style.transform = `rotate(${(360/prizes.length)*i}deg) skewY(-60deg)`;
+    seg.style.backgroundColor = `hsl(${(360/prizes.length)*i}, 70%, 50%)`;
+    seg.textContent = prize;
+    roulette.appendChild(seg);
+});
+
+document.getElementById("spinBtn").addEventListener("click", () => {
+    if (spun) {
+        alert("룰렛은 한 번만 돌릴 수 있어요!");
+        return;
+    }
+    spun = true;
+    const randomDeg = 360 * 5 + Math.floor(Math.random() * 360); // 5바퀴 + 랜덤
+    roulette.style.transition = "transform 5s ease-out";
+    roulette.style.transform = `rotate(${randomDeg}deg)`;
+
+    setTimeout(() => {
+        const winnerIndex = prizes.length - 1 - Math.floor((randomDeg % 360) / (360 / prizes.length));
+        result.textContent = `🎉 당첨: ${prizes[winnerIndex]} 🎉`;
+    }, 5000);
+});
+</script>
+</body>
+</html>
